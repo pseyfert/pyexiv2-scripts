@@ -21,4 +21,4 @@ todo
 ====
 
 * write nice USAGE messages
-
+* migrate to pyexiv2 replacement
