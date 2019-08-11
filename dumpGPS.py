@@ -1,10 +1,27 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-import sys, pyexiv2
-for i in range(1,len(sys.argv)):
-   metadata = pyexiv2.ImageMetadata(sys.argv[i])
-   metadata.read()
-   if 'Exif.GPSInfo.GPSImgDirection' in metadata.exif_keys :
-      print sys.argv[i] + "\t" + metadata['Exif.GPSInfo.GPSImgDirection'].raw_value
-   else :
-      print sys.argv[i] + "\t doesn't contain compass information"
+import sys
+from gi.repository import GExiv2
+
+for i in range(1, len(sys.argv)):
+    metadata = GExiv2.Metadata(sys.argv[i])
+    print("direction:")
+    if 'Exif.GPSInfo.GPSImgDirection' in metadata:
+        print("{}\t{}".format(
+            sys.argv[i], metadata['Exif.GPSInfo.GPSImgDirection']))
+    else:
+        print("{}\tdoesn't contain compass information".format(sys.argv[i]))
+
+    print("altitude:")
+    if 'Exif.GPSInfo.GPSAltitude' in metadata:
+        print("{}\t{}".format(sys.argv[i],
+                              metadata['Exif.GPSInfo.GPSAltitude']))
+    else:
+        print("{}\tdoesn't contain altitude information".format(sys.argv[i]))
+
+    print("latitude, longitude:")
+    if 'Exif.GPSInfo.GPSLatitude' in metadata:
+        print("{}\t{},{}".format(
+            sys.argv[i], metadata['Exif.GPSInfo.GPSLatitude'], metadata['Exif.GPSInfo.GPSLongitude']))
+    else:
+        print("{}\tdoesn't contain location information".format(sys.argv[i]))
