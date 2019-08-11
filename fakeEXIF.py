@@ -1,18 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+import sys
+from gi.repository import GExiv2
 
 deftags = {
-'Exif.Image.Model':"S1234"
+    'Exif.Image.Model': "S1234",
+    'Exif.Nikon3.SerialNumber': "1234567",
+    'Exif.Nikon3.Lens': "180/10 42/23",
+    'Exif.Nikon3.LensFStops': "13 37",
+    'Exif.Nikon3.LensType': "42",
+    'Exif.NikonLd3.LensIDNumber': "100"
 }
-import sys, pyexiv2
-for i in range(1,len(sys.argv)):
-   metadata = pyexiv2.ImageMetadata(sys.argv[i])
-   metadata.read()
-   #for key in deftags:
-   mykeys = []
-   for key,value in deftags:
-     mykeys += [key]
-   for key,name in metadata.items():
-     if key in mykeys :
-       metadata[key].raw_value = deftags[key]
-   metadata.write(True)
 
+for i in range(1, len(sys.argv)):
+    metadata = GExiv2.Metadata(sys.argv[i])
+
+    for key in metadata:
+        if key in deftags:
+            metadata[key] = deftags[key]
+    metadata.save_file()
